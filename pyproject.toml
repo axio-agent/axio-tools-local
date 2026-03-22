@@ -1,10 +1,11 @@
 [project]
 name = "axio-tools-local"
-version = "0.2.2"
+version = "0.2.3"
 description = "Core filesystem and execution tools for Axio"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
+keywords = ["llm", "agent", "ai", "tools", "filesystem", "shell"]
 dependencies = ["axio"]
 
 [project.entry-points."axio.tools"]
@@ -15,6 +16,10 @@ patch_file = "axio_tools_local.patch_file:PatchFile"
 read_file = "axio_tools_local.read_file:ReadFile"
 list_files = "axio_tools_local.list_files:ListFiles"
 
+
+[project.urls]
+Homepage = "https://github.com/axio-agent/axio-tools-local"
+Repository = "https://github.com/axio-agent/axio-tools-local"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
