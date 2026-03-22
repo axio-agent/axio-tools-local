@@ -1,7 +1,8 @@
 [project]
 name = "axio-tools-local"
-version = "0.2.1"
+version = "0.2.2"
 description = "Core filesystem and execution tools for Axio"
+readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
 dependencies = ["axio"]
