@@ -6,11 +6,12 @@ from axio.tool import ToolHandler
 
 
 class PatchFile(ToolHandler):
-    """Replace a range of lines in an existing file. Lines are 0-indexed:
-    from_line is inclusive, to_line is exclusive. The content string replaces
-    lines[from_line:to_line]. Always read the file first to get correct
-    line numbers. Use this for surgical edits instead of rewriting the
-    whole file with write_file."""
+    """Replace a range of lines in an existing file. Lines are 1-indexed:
+    from_line and to_line are both inclusive (from_line=2, to_line=4 replaces
+    lines 2, 3, 4). To insert without deleting, set to_line = from_line - 1.
+    Always read the file first with indexed=True to get correct line numbers.
+    Use this for surgical edits instead of rewriting the whole file with
+    write_file."""
 
     file_path: str
     mode: int = 0o644
@@ -33,11 +34,13 @@ class PatchFile(ToolHandler):
         with path.open("r") as f:
             lines = f.readlines()
 
-        # content lines
-        content = self.content.splitlines()
+        # content lines — preserve existing newlines
+        content_lines = self.content.splitlines(keepends=True)
+        if content_lines and not content_lines[-1].endswith("\n"):
+            content_lines[-1] += "\n"
 
-        # patch lines
-        new_lines = lines[: self.from_line] + content + lines[self.to_line :]
+        # patch lines (from_line/to_line are 1-indexed, both inclusive)
+        new_lines = lines[: self.from_line - 1] + content_lines + lines[self.to_line :]
         with path.open("w") as f:
             f.writelines(new_lines)
             return f"{f.tell()} bytes written to {self.file_path}"

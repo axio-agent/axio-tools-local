@@ -21,16 +21,19 @@ class Shell(ToolHandler):
         return f"Shell(command={_short(self.command)!r}, cwd={self.cwd!r})"
 
     def _blocking(self) -> str:
-        result = subprocess.run(
-            self.command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=self.timeout,
-            cwd=self.cwd,
-            input=self.stdin if self.stdin is not None else None,
-            stdin=subprocess.DEVNULL if self.stdin is None else None,
-        )
+        try:
+            result = subprocess.run(
+                self.command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+                cwd=self.cwd,
+                input=self.stdin if self.stdin is not None else None,
+                stdin=subprocess.DEVNULL if self.stdin is None else None,
+            )
+        except subprocess.TimeoutExpired:
+            return f"[timeout: command exceeded {self.timeout}s]"
         output = ""
         if result.stdout:
             output += result.stdout

@@ -24,7 +24,11 @@ class ListFiles(ToolHandler):
             raise FileNotFoundError(f"{self.directory} is not a valid directory")
         lines: list[str] = []
         for fpath in sorted(path.glob("*"), key=lambda p: (not p.is_dir(), p.name)):
-            st = fpath.stat()
+            try:
+                st = fpath.stat()
+            except OSError:
+                lines.append(f"{'?':10} {'?':>8} {'?':12} {fpath.name} [broken symlink]")
+                continue
             mode = stat_module.filemode(st.st_mode)
             size = st.st_size
             mtime = datetime.fromtimestamp(st.st_mtime).strftime("%b %d %H:%M")
