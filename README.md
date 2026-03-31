@@ -1,3 +1,6 @@
+> [\!NOTE]
+> This repository has been archived. Development continues in [axio-agent/monorepo](https://github.com/axio-agent/monorepo).
+
 # axio-tools-local
 
 [![PyPI](https://img.shields.io/pypi/v/axio-tools-local)](https://pypi.org/project/axio-tools-local/)
